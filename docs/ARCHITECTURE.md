@@ -1,34 +1,34 @@
-# Architecture
+# Arsitektur
 
-## Decision
+## Keputusan
 
-StarterPython uses a **Modular Monolith with pragmatic DDD-lite boundaries**. FastAPI is the primary HTTP delivery mechanism, not the center of the architecture.
+StarterPython menggunakan **Modular Monolith dengan batas DDD-lite yang pragmatis**. FastAPI adalah mekanisme delivery HTTP utama, bukan pusat arsitektur aplikasi.
 
-## Dependency direction
+## Arah Dependency
 
 ```text
 Presentation -> Application -> Domain
-Infrastructure -> Domain/Application contracts
-Bootstrap -> all composition roots
+Infrastructure -> kontrak Domain/Application
+Bootstrap -> seluruh composition root
 ```
 
-The Domain layer must not import FastAPI, SQLAlchemy ORM models, Redis clients, or other delivery/infrastructure frameworks.
+Layer Domain tidak boleh mengimpor FastAPI, model ORM SQLAlchemy, client Redis, atau framework delivery/infrastructure lainnya.
 
-## Top-level responsibilities
+## Tanggung Jawab Level Atas
 
 ### `core/`
-Technical primitives shared by the application: configuration, logging, database engine/session, cache client, exception mapping. Business rules do not belong here.
+Primitive teknis yang digunakan bersama oleh aplikasi: konfigurasi, logging, database engine/session, cache client, dan pemetaan exception. Business rule tidak boleh ditempatkan di sini.
 
 ### `bootstrap/`
-Composition root. It connects routers, lifecycle hooks, dependency implementations, and application initialization.
+Composition root. Bagian ini menghubungkan router, lifecycle hook, implementasi dependency, dan proses inisialisasi aplikasi.
 
 ### `modules/`
-Business capabilities. New business behavior should normally live in a module.
+Kapabilitas bisnis. Perilaku bisnis baru pada umumnya harus ditempatkan di dalam sebuah modul.
 
 ### `shared/`
-A deliberately small shared kernel for stable primitives used by multiple modules. Do not use it as a dumping ground.
+Shared kernel yang sengaja dijaga tetap kecil untuk primitive stabil yang benar-benar digunakan beberapa modul. Jangan menjadikannya tempat penampungan kode umum.
 
-## Module structure
+## Struktur Modul
 
 ```text
 modules/<module>/
@@ -51,25 +51,26 @@ modules/<module>/
     └── schemas.py
 ```
 
-Folders are created when they have real content; empty ceremony is not required.
+Folder dibuat ketika memang memiliki isi dan tanggung jawab nyata. Tidak perlu membuat struktur kosong hanya demi mengikuti template.
 
-## Request flow
+## Alur Request
 
-A mutating request should generally flow as:
+Request yang mengubah state pada umumnya mengikuti alur:
 
 ```text
 HTTP schema -> route -> application command/use case -> domain -> repository contract -> adapter
 ```
 
-A simple read may use a query service/read model without reconstructing a rich aggregate when no domain invariant is involved.
+Operasi baca sederhana boleh menggunakan query service/read model tanpa membangun aggregate lengkap jika tidak ada invariant domain yang perlu dijalankan.
 
-## Rules
+## Aturan
 
-1. Never import another module's infrastructure models directly.
-2. Cross-module synchronous access goes through an application contract/facade.
-3. Cross-module reactions that need no immediate response use events.
-4. Transactions belong to the application/use-case boundary, not HTTP routes.
-5. Domain objects express invariants; Pydantic request schemas are not domain entities.
-6. Prefer explicit code over generic repository/service abstractions with no business value.
-7. Add CQRS patterns only where command/query separation improves clarity or scaling.
-8. Record significant architectural changes as ADRs.
+1. Jangan pernah mengimpor model infrastructure milik modul lain secara langsung.
+2. Akses sinkron lintas modul harus melalui application contract/facade.
+3. Reaksi lintas modul yang tidak membutuhkan hasil langsung menggunakan event.
+4. Transaction boundary berada pada layer application/use case, bukan pada HTTP route.
+5. Object domain mengekspresikan invariant; Pydantic request schema bukan domain entity.
+6. Utamakan kode eksplisit dibanding abstraction repository/service generik yang tidak memberi nilai bisnis.
+7. Gunakan pola CQRS hanya ketika pemisahan command/query benar-benar meningkatkan kejelasan atau skalabilitas.
+8. Perubahan arsitektur yang signifikan harus dicatat sebagai ADR.
+9. Seluruh dokumentasi arsitektur dan dokumentasi proyek wajib ditulis dalam Bahasa Indonesia.
