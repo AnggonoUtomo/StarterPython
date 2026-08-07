@@ -1,12 +1,12 @@
-# Module Guide
+# Panduan Modul
 
-A module represents a business capability with an explicit boundary, vocabulary, and ownership of its persistence model.
+Sebuah modul merepresentasikan kapabilitas bisnis dengan boundary, vocabulary, serta kepemilikan model persistence yang eksplisit.
 
-## When to create a module
+## Kapan Membuat Modul
 
-Create one when the capability has meaningful business rules, its own lifecycle/data ownership, or needs an independent boundary. Do not create modules for generic helpers.
+Buat modul ketika sebuah kapabilitas memiliki business rule yang berarti, lifecycle/data ownership sendiri, atau membutuhkan boundary independen. Jangan membuat modul hanya untuk helper generik.
 
-## Minimal module
+## Modul Minimal
 
 ```text
 modules/billing/
@@ -21,32 +21,32 @@ modules/billing/
     └── schemas.py
 ```
 
-A module may start smaller. Add folders because a responsibility exists, not because a template says every folder must exist.
+Sebuah modul boleh dimulai lebih kecil. Tambahkan folder karena memang ada tanggung jawab yang perlu ditempatkan, bukan karena template mengharuskan semua folder tersedia.
 
-## Feature implementation sequence
+## Urutan Implementasi Fitur
 
-1. Write the feature/module spec when behavior is non-trivial.
-2. Identify invariants and ownership.
-3. Define domain concepts.
-4. Define required application input/output.
-5. Define contracts for persistence/external dependencies.
-6. Implement infrastructure adapters.
-7. Expose through presentation.
-8. Add unit/integration/feature tests.
-9. Update docs/ADR when architecture changed.
+1. Tulis spesifikasi fitur/modul jika perilakunya tidak trivial.
+2. Identifikasi invariant dan ownership.
+3. Definisikan konsep domain.
+4. Definisikan input/output application yang diperlukan.
+5. Definisikan contract untuk persistence atau dependency eksternal.
+6. Implementasikan infrastructure adapter.
+7. Ekspos melalui presentation layer.
+8. Tambahkan unit test, integration test, atau feature test sesuai kebutuhan.
+9. Perbarui dokumentasi/ADR jika arsitektur berubah.
 
-## Naming
+## Penamaan
 
-Use business language: `CreateInvoice`, `Membership`, `TradingSignal`. Avoid weak names such as `Manager`, `Helper`, `CommonService`, or `Utils` when a more precise capability exists.
+Gunakan bahasa bisnis yang jelas seperti `CreateInvoice`, `Membership`, atau `TradingSignal`. Hindari nama lemah seperti `Manager`, `Helper`, `CommonService`, atau `Utils` jika terdapat nama kapabilitas yang lebih tepat.
 
-## Boundary rule
+Nama identifier di source code tetap menggunakan Bahasa Inggris mengikuti konvensi Python, sedangkan dokumentasi penjelasannya wajib menggunakan Bahasa Indonesia.
 
-This is forbidden:
+## Aturan Boundary
+
+Import berikut dilarang jika dilakukan dari modul lain:
 
 ```python
 from starterpython.modules.users.infrastructure.models import UserModel
 ```
 
-from another module.
-
-Prefer a stable application-facing contract such as `UserReader`, `UserAccess`, or an event published by the owning module.
+Gunakan application-facing contract yang stabil seperti `UserReader`, `UserAccess`, atau event yang dipublikasikan oleh modul pemilik data.
