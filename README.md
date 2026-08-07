@@ -1,14 +1,20 @@
 # StarterPython
 
-Production-oriented Python backend starterkit built with FastAPI, PostgreSQL, SQLAlchemy 2, Alembic, Redis, and a pragmatic Modular Monolith / DDD-lite architecture.
+Starterkit backend Python berorientasi produksi yang dibangun dengan FastAPI, PostgreSQL, SQLAlchemy 2, Alembic, Redis, serta arsitektur Modular Monolith / DDD-lite yang pragmatis.
 
-## Goals
+## Tujuan
 
-StarterPython is a reusable baseline for APIs, SaaS backends, internal systems, AI services, trading/data services, and other backend applications that need clear module boundaries without the overhead of full enterprise DDD.
+StarterPython adalah baseline reusable untuk API, backend SaaS, sistem internal, layanan AI, layanan trading/data, dan aplikasi backend lain yang membutuhkan batas modul yang jelas tanpa overhead DDD enterprise penuh.
 
-The project optimizes for clear module boundaries, pragmatic DDD-lite conventions, AI/Codex-friendly documentation, production-ready configuration patterns, strong typing, and incremental growth.
+Proyek ini mengutamakan batas modul yang tegas, konvensi DDD-lite yang pragmatis, dokumentasi yang ramah AI/Codex, pola konfigurasi siap produksi, strong typing, serta pertumbuhan aplikasi secara incremental.
 
-## Stack
+## Kebijakan Bahasa Dokumentasi
+
+**Seluruh dokumentasi StarterPython wajib dibuat dalam Bahasa Indonesia.** Aturan ini berlaku untuk README, dokumentasi arsitektur, ADR, spesifikasi fitur, change record, roadmap, panduan modul, dokumentasi persistence, dan dokumentasi baru yang dibuat pada masa mendatang.
+
+Nama class, function, variable, module, endpoint, command, serta identifier teknis dalam source code tetap menggunakan Bahasa Inggris mengikuti konvensi ekosistem Python. Istilah teknis yang lebih jelas dalam bentuk aslinya seperti `Unit of Work`, `repository`, `domain event`, dan `dependency` boleh dipertahankan dengan penjelasan Bahasa Indonesia.
+
+## Stack Teknologi
 
 - Python 3.13+
 - FastAPI
@@ -21,7 +27,7 @@ The project optimizes for clear module boundaries, pragmatic DDD-lite convention
 - Ruff + Pyright
 - Docker / Docker Compose
 
-## Architecture
+## Arsitektur
 
 ```text
 HTTP Request
@@ -48,9 +54,9 @@ src/starterpython/
         └── presentation/
 ```
 
-The `users` module is the reference vertical slice for persistence conventions.
+Modul `users` merupakan vertical slice referensi untuk konvensi persistence.
 
-Read these documents before adding modules or persistence behavior:
+Baca dokumentasi berikut sebelum menambahkan modul atau perilaku persistence:
 
 - `docs/ARCHITECTURE.md`
 - `docs/MODULE-GUIDE.md`
@@ -58,7 +64,7 @@ Read these documents before adding modules or persistence behavior:
 - `docs/PERSISTENCE-CONVENTIONS.md`
 - `docs/AI-DEVELOPMENT-GUIDE.md`
 
-## Quick start
+## Memulai dengan Cepat
 
 ```bash
 uv sync --all-groups
@@ -68,9 +74,9 @@ uv run alembic upgrade head
 uv run fastapi dev src/starterpython/main.py
 ```
 
-Open `http://127.0.0.1:8000/docs` and `http://127.0.0.1:8000/api/v1/health`.
+Buka `http://127.0.0.1:8000/docs` dan `http://127.0.0.1:8000/api/v1/health`.
 
-The persistence reference endpoint is:
+Endpoint referensi persistence:
 
 ```http
 POST /api/v1/users
@@ -82,7 +88,7 @@ Content-Type: application/json
 }
 ```
 
-## Quality checks
+## Pemeriksaan Kualitas
 
 ```bash
 uv run ruff check .
@@ -91,30 +97,30 @@ uv run pyright
 uv run pytest
 ```
 
-`uv run pytest` runs the default fast test suite without external infrastructure.
+`uv run pytest` menjalankan test suite cepat secara default tanpa infrastruktur eksternal.
 
-To run PostgreSQL integration tests locally:
+Untuk menjalankan integration test PostgreSQL secara lokal:
 
 ```bash
 docker compose up -d postgres
 uv run pytest -o addopts="-q --strict-markers --strict-config" -m integration tests/integration
 ```
 
-GitHub Actions provisions its own PostgreSQL service for the integration suite.
+GitHub Actions menyediakan service PostgreSQL sendiri untuk integration test.
 
-## Migrations
+## Migrasi Database
 
 ```bash
 uv run alembic upgrade head
-uv run alembic revision --autogenerate -m "change description"
+uv run alembic revision --autogenerate -m "deskripsi perubahan"
 ```
 
-## Current status
+## Status Saat Ini
 
-`v0.2.0` establishes the runnable foundation plus the official persistence reference implementation: domain entity, repository contract, SQLAlchemy mapping/adapter, Unit of Work transaction boundary, Alembic migration, thin HTTP endpoint, fake-based unit tests, and PostgreSQL integration tests.
+`v0.2.0` menyediakan fondasi runnable sekaligus implementasi referensi persistence resmi: domain entity, repository contract, mapping/adapter SQLAlchemy, transaction boundary melalui Unit of Work, migrasi Alembic, HTTP endpoint yang tipis, unit test berbasis fake, dan integration test PostgreSQL.
 
-Next planned increment: `v0.3 Identity`.
+Increment berikutnya yang direncanakan: `v0.3 Identity`.
 
-## License
+## Lisensi
 
-No license has been selected yet. Add one before distributing this starterkit as an open-source package.
+Belum ada lisensi yang dipilih. Tambahkan lisensi sebelum mendistribusikan starterkit ini sebagai paket open-source.
