@@ -1,36 +1,40 @@
-# ADR-0001: Modular Monolith with DDD-lite
+# ADR-0001: Modular Monolith dengan DDD-lite
 
-- Status: Accepted
-- Date: 2026-08-07
+- Status: Diterima
+- Tanggal: 2026-08-07
 
-## Context
+## Konteks
 
-StarterPython must support small projects while remaining structurally stable as business capabilities grow. A flat FastAPI project becomes coupled quickly, while full enterprise DDD/CQRS introduces ceremony before it provides value.
+StarterPython harus dapat digunakan untuk project kecil namun tetap memiliki struktur yang stabil ketika kapabilitas bisnis bertambah. Project FastAPI yang flat akan cepat mengalami coupling, sedangkan DDD/CQRS enterprise penuh menambahkan terlalu banyak ceremony sebelum memberikan manfaat nyata.
 
-## Decision
+## Keputusan
 
-Use a Modular Monolith organized by business capability. Inside modules, use Domain/Application/Infrastructure/Presentation responsibilities as needed. Apply DDD patterns selectively where business invariants justify them.
+Gunakan Modular Monolith yang diorganisasi berdasarkan kapabilitas bisnis. Di dalam modul, gunakan tanggung jawab Domain/Application/Infrastructure/Presentation sesuai kebutuhan. Terapkan pola DDD secara selektif ketika business invariant memang membutuhkannya.
 
-FastAPI remains a delivery adapter. SQLAlchemy and Redis are infrastructure. The domain must remain independent of these frameworks.
+FastAPI tetap menjadi delivery adapter. SQLAlchemy dan Redis berada pada infrastructure. Domain harus independen dari framework tersebut.
 
-## Consequences
+## Konsekuensi
 
-### Positive
+### Positif
 
-- explicit business boundaries;
-- easier incremental growth;
-- testable domain/application logic;
-- consistent structure for humans and AI agents;
-- future extraction of a module is possible without designing for microservices today.
+- boundary bisnis menjadi eksplisit;
+- pertumbuhan incremental lebih mudah;
+- logic domain/application lebih mudah diuji;
+- struktur konsisten untuk developer manusia maupun AI agent;
+- ekstraksi modul pada masa mendatang tetap memungkinkan tanpa harus mendesain microservices sejak awal.
 
-### Trade-offs
+### Trade-off
 
-- developers must respect module ownership;
-- some cross-module use cases require explicit contracts/events;
-- documentation discipline is necessary to prevent architecture drift.
+- developer harus disiplin menghormati ownership modul;
+- beberapa use case lintas modul membutuhkan contract/event yang eksplisit;
+- disiplin dokumentasi diperlukan untuk mencegah architecture drift.
 
-## Rejected alternatives
+## Alternatif yang Ditolak
 
-- Flat `routers/services/models` architecture: simple initially but weak business boundaries.
-- Microservices-first: operational complexity is unjustified for a starterkit baseline.
-- Full CQRS/event sourcing by default: too much ceremony for general-purpose projects.
+- Arsitektur flat `routers/services/models`: sederhana pada awalnya tetapi memiliki boundary bisnis yang lemah.
+- Microservices-first: kompleksitas operasional tidak sebanding untuk baseline starterkit.
+- Full CQRS/event sourcing secara default: terlalu banyak ceremony untuk project general-purpose.
+
+## Kebijakan Bahasa
+
+ADR ini dan seluruh ADR berikutnya wajib ditulis dalam Bahasa Indonesia. Istilah teknis Bahasa Inggris boleh dipertahankan jika lebih presisi, tetapi keputusan, alasan, konsekuensi, dan konteks harus dijelaskan dalam Bahasa Indonesia.
