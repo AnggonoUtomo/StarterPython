@@ -1,35 +1,37 @@
-# Feature Spec: <name>
+# Spesifikasi Fitur: <nama>
 
-## Context
-Describe the problem and business context.
+> Seluruh isi Feature Spec wajib ditulis dalam Bahasa Indonesia. Nama identifier source code tetap mengikuti konvensi Python berbahasa Inggris.
 
-## Goal
-State the observable outcome.
+## Konteks
+Jelaskan masalah dan konteks bisnis yang melatarbelakangi fitur.
 
-## Non-goals
-State what this change intentionally does not solve.
+## Tujuan
+Nyatakan outcome yang dapat diamati atau diverifikasi.
 
-## Module ownership
-- Owning module:
-- Collaborating modules:
+## Non-Tujuan
+Jelaskan hal-hal yang secara sengaja tidak diselesaikan oleh perubahan ini.
 
-## Functional requirements
+## Kepemilikan Modul
+- Modul pemilik:
+- Modul yang berkolaborasi:
+
+## Kebutuhan Fungsional
 - [ ] FR-001
 
-## Invariants
-List rules that must always hold.
+## Invariant
+Tuliskan aturan yang harus selalu benar dan tidak boleh dilanggar.
 
-## Interfaces
-Document HTTP/API, application contracts, events, or external integration changes.
+## Interface
+Dokumentasikan perubahan HTTP/API, application contract, event, atau integrasi eksternal.
 
 ## Persistence
-Describe tables/entities/migrations and data ownership.
+Jelaskan tabel/entity/migration serta ownership data.
 
-## Security
-Authentication, authorization, sensitive data, abuse considerations.
+## Keamanan
+Jelaskan authentication, authorization, data sensitif, dan pertimbangan abuse/security.
 
-## Test plan
-Unit, integration, and feature scenarios.
+## Rencana Pengujian
+Jelaskan skenario unit test, integration test, dan feature test.
 
-## Rollout / migration
-Operational or backward-compatibility notes.
+## Rollout / Migrasi
+Tuliskan catatan operasional, deployment, migration, atau backward compatibility.
