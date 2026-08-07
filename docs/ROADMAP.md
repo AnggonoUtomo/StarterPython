@@ -15,11 +15,15 @@
 
 ## v0.2 — Persistence conventions
 
-- [ ] example aggregate and SQLAlchemy mapping
-- [ ] Unit of Work transaction boundary
-- [ ] repository implementation example
-- [ ] first Alembic migration
-- [ ] integration-test database fixtures
+- [x] example `users` aggregate and SQLAlchemy mapping
+- [x] Unit of Work transaction boundary
+- [x] repository contract + SQLAlchemy adapter example
+- [x] first Alembic migration
+- [x] unit tests with fake repository/UoW
+- [x] PostgreSQL integration-test fixtures
+- [x] documented persistence conventions
+
+Reference implementation: `src/starterpython/modules/users/`.
 
 ## v0.3 — Identity
 
@@ -56,4 +60,4 @@
 - [ ] production Docker hardening
 - [ ] security checklist
 - [ ] deployment guide
-- [ ] example reference module
+- [x] example reference module (`users`)
