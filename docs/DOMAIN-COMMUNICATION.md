@@ -1,42 +1,44 @@
-# Domain Communication
+# Komunikasi Antar Domain dan Modul
 
-Cross-module communication is explicit. Choose the least coupled mechanism that preserves correctness.
+Komunikasi lintas modul harus eksplisit. Pilih mekanisme dengan coupling paling rendah yang tetap menjaga correctness.
 
-## 1. Application contract / facade
+## 1. Application Contract / Facade
 
-Use for synchronous behavior when the caller needs a result now.
+Gunakan untuk perilaku sinkron ketika pemanggil membutuhkan hasil saat itu juga.
 
-Example: Billing asks Identity whether a user is active through a public application interface, not through Identity's ORM model.
+Contoh: Billing menanyakan kepada Identity apakah seorang user aktif melalui public application interface, bukan melalui model ORM milik Identity.
 
-## 2. Domain or application event
+## 2. Domain Event atau Application Event
 
-Use when another module reacts to something that already happened and the originating transaction does not require its result.
+Gunakan ketika modul lain bereaksi terhadap sesuatu yang sudah terjadi dan transaction asal tidak membutuhkan hasil dari reaksi tersebut.
 
-Example: `OrderCreated` can trigger Notification and Analytics handlers.
+Contoh: `OrderCreated` dapat memicu handler Notification dan Analytics.
 
-Events are facts, use past-tense names, and must not expose infrastructure models.
+Event adalah fakta, sebaiknya menggunakan nama bentuk lampau, dan tidak boleh mengekspos model infrastructure.
 
-## 3. Query interface / read model
+## 3. Query Interface / Read Model
 
-Use for cross-module reads where a purpose-built projection is clearer than loading another module's aggregate.
+Gunakan untuk pembacaan lintas modul ketika projection khusus lebih jelas dibanding memuat aggregate milik modul lain.
 
-## 4. Shared kernel
+## 4. Shared Kernel
 
-Use only for stable primitives with truly shared meaning, such as identifiers, money primitives, base domain event types, or clock abstractions. Shared kernel changes have a high blast radius.
+Gunakan hanya untuk primitive stabil yang benar-benar memiliki makna bersama, seperti identifier, primitive uang, base domain event type, atau clock abstraction. Perubahan pada shared kernel memiliki dampak luas.
 
-## Decision table
+## Tabel Keputusan
 
-| Need | Mechanism |
+| Kebutuhan | Mekanisme |
 |---|---|
-| Immediate result from another module | Application contract |
-| React after a completed business fact | Event |
-| Read-only cross-module information | Query interface/read model |
-| Stable universal primitive | Shared kernel |
+| Membutuhkan hasil langsung dari modul lain | Application contract |
+| Bereaksi setelah business fact selesai | Event |
+| Informasi read-only lintas modul | Query interface/read model |
+| Primitive universal yang stabil | Shared kernel |
 
-## Prohibited shortcuts
+## Shortcut yang Dilarang
 
-- Importing another module's repository implementation.
-- Importing another module's SQLAlchemy model.
-- Writing another module's tables directly.
-- Using Redis/pub-sub merely to avoid defining an in-process contract.
-- Creating a global `services/` directory that bypasses module ownership.
+- Mengimpor implementasi repository milik modul lain.
+- Mengimpor model SQLAlchemy milik modul lain.
+- Menulis langsung ke tabel milik modul lain.
+- Menggunakan Redis/pub-sub hanya untuk menghindari pembuatan in-process contract.
+- Membuat direktori global `services/` yang melewati ownership modul.
+
+Seluruh penjelasan, keputusan, dan dokumentasi komunikasi antar modul wajib ditulis dalam Bahasa Indonesia.
