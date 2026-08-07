@@ -1,16 +1,18 @@
-# ADR-NNNN: <decision title>
+# ADR-NNNN: <judul keputusan>
 
-- Status: Proposed
-- Date: YYYY-MM-DD
+- Status: Diusulkan
+- Tanggal: YYYY-MM-DD
 
-## Context
-What forces require a durable architectural decision?
+> Seluruh ADR wajib ditulis dalam Bahasa Indonesia. Istilah teknis Bahasa Inggris boleh digunakan jika lebih presisi.
 
-## Decision
-What are we choosing?
+## Konteks
+Kondisi, masalah, atau tekanan apa yang membutuhkan keputusan arsitektur jangka panjang?
 
-## Consequences
-What becomes easier, harder, constrained, or required?
+## Keputusan
+Pilihan arsitektur apa yang ditetapkan?
 
-## Alternatives considered
-What credible alternatives were rejected and why?
+## Konsekuensi
+Apa yang menjadi lebih mudah, lebih sulit, dibatasi, atau menjadi kewajiban setelah keputusan ini?
+
+## Alternatif yang Dipertimbangkan
+Alternatif realistis apa yang ditolak dan mengapa?
