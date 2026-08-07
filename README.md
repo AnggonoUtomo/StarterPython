@@ -40,14 +40,23 @@ src/starterpython/
 ├── core/
 ├── shared/
 └── modules/
-    └── system/
+    ├── system/
+    └── users/
         ├── application/
         ├── domain/
         ├── infrastructure/
         └── presentation/
 ```
 
-Read `docs/ARCHITECTURE.md`, `docs/MODULE-GUIDE.md`, and `docs/AI-DEVELOPMENT-GUIDE.md` before adding modules.
+The `users` module is the reference vertical slice for persistence conventions.
+
+Read these documents before adding modules or persistence behavior:
+
+- `docs/ARCHITECTURE.md`
+- `docs/MODULE-GUIDE.md`
+- `docs/DOMAIN-COMMUNICATION.md`
+- `docs/PERSISTENCE-CONVENTIONS.md`
+- `docs/AI-DEVELOPMENT-GUIDE.md`
 
 ## Quick start
 
@@ -55,10 +64,23 @@ Read `docs/ARCHITECTURE.md`, `docs/MODULE-GUIDE.md`, and `docs/AI-DEVELOPMENT-GU
 uv sync --all-groups
 cp .env.example .env
 docker compose up -d postgres redis
+uv run alembic upgrade head
 uv run fastapi dev src/starterpython/main.py
 ```
 
 Open `http://127.0.0.1:8000/docs` and `http://127.0.0.1:8000/api/v1/health`.
+
+The persistence reference endpoint is:
+
+```http
+POST /api/v1/users
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "name": "Example User"
+}
+```
 
 ## Quality checks
 
@@ -69,6 +91,17 @@ uv run pyright
 uv run pytest
 ```
 
+`uv run pytest` runs the default fast test suite without external infrastructure.
+
+To run PostgreSQL integration tests locally:
+
+```bash
+docker compose up -d postgres
+uv run pytest -o addopts="-q --strict-markers --strict-config" -m integration tests/integration
+```
+
+GitHub Actions provisions its own PostgreSQL service for the integration suite.
+
 ## Migrations
 
 ```bash
@@ -78,7 +111,9 @@ uv run alembic revision --autogenerate -m "change description"
 
 ## Current status
 
-`v0.1-foundation` establishes the runnable skeleton, configuration, health endpoint, persistence/cache infrastructure, testing baseline, CI, Docker environment, and architectural documentation. Identity, access control, jobs, generators, and observability are planned increments.
+`v0.2.0` establishes the runnable foundation plus the official persistence reference implementation: domain entity, repository contract, SQLAlchemy mapping/adapter, Unit of Work transaction boundary, Alembic migration, thin HTTP endpoint, fake-based unit tests, and PostgreSQL integration tests.
+
+Next planned increment: `v0.3 Identity`.
 
 ## License
 
