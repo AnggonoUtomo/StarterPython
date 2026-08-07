@@ -1,63 +1,67 @@
 # Roadmap
 
-## v0.1 — Foundation
+## v0.1 — Fondasi
 
-- [x] FastAPI application factory
-- [x] environment configuration
-- [x] structured logging baseline
-- [x] SQLAlchemy async session
-- [x] Redis client
+- [x] application factory FastAPI
+- [x] konfigurasi environment
+- [x] baseline structured logging
+- [x] async session SQLAlchemy
+- [x] client Redis
 - [x] health endpoint
 - [x] Docker Compose PostgreSQL + Redis
 - [x] pytest, Ruff, Pyright
-- [x] CI workflow
-- [x] architectural documentation
+- [x] workflow CI
+- [x] dokumentasi arsitektur
 
-## v0.2 — Persistence conventions
+## v0.2 — Konvensi Persistence
 
-- [x] example `users` aggregate and SQLAlchemy mapping
-- [x] Unit of Work transaction boundary
-- [x] repository contract + SQLAlchemy adapter example
-- [x] first Alembic migration
-- [x] unit tests with fake repository/UoW
-- [x] PostgreSQL integration-test fixtures
-- [x] documented persistence conventions
+- [x] contoh aggregate `users` dan mapping SQLAlchemy
+- [x] transaction boundary dengan Unit of Work
+- [x] contoh repository contract + SQLAlchemy adapter
+- [x] migrasi Alembic pertama
+- [x] unit test dengan fake repository/UoW
+- [x] fixture integration test PostgreSQL
+- [x] dokumentasi konvensi persistence
 
-Reference implementation: `src/starterpython/modules/users/`.
+Implementasi referensi: `src/starterpython/modules/users/`.
 
 ## v0.3 — Identity
 
 - [ ] registration/login
-- [ ] Argon2 password hashing
-- [ ] access + refresh tokens
+- [ ] password hashing Argon2
+- [ ] access token + refresh token
 - [ ] token rotation/revocation
-- [ ] email verification/password reset boundaries
+- [ ] boundary email verification/password reset
 
 ## v0.4 — Access Control
 
-- [ ] roles and permissions
-- [ ] policy/authorization layer
+- [ ] role dan permission
+- [ ] layer policy/authorization
 - [ ] reusable FastAPI authorization dependency
 
-## v0.5 — Application messaging
+## v0.5 — Application Messaging
 
 - [ ] in-process event bus
-- [ ] transactional event dispatch convention
+- [ ] konvensi transactional event dispatch
 - [ ] background job adapter
-- [ ] retry/idempotency conventions
+- [ ] konvensi retry/idempotency
 
 ## v0.6 — Developer Experience
 
-- [ ] CLI command `starterpython new`
-- [ ] module generator
-- [ ] feature generator
-- [ ] migration/test scaffolding
+- [ ] command CLI `starterpython new`
+- [ ] generator modul
+- [ ] generator fitur
+- [ ] scaffolding migration/test
 
-## v1.0 — Production baseline
+## v1.0 — Baseline Produksi
 
 - [ ] OpenTelemetry
 - [ ] metrics/tracing
 - [ ] production Docker hardening
-- [ ] security checklist
-- [ ] deployment guide
-- [x] example reference module (`users`)
+- [ ] checklist keamanan
+- [ ] panduan deployment
+- [x] contoh modul referensi (`users`)
+
+## Kebijakan Dokumentasi
+
+Semua dokumentasi yang dibuat pada setiap fase roadmap wajib menggunakan Bahasa Indonesia, termasuk ADR, Feature Spec, Change Record, panduan implementasi, dokumentasi modul, dan catatan migration.
