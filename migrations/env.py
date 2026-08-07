@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from starterpython.core.config import get_settings
 from starterpython.core.database import Base
+from starterpython.modules.users.infrastructure.persistence.models import UserModel  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:
