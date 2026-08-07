@@ -1,10 +1,10 @@
-# Persistence Conventions
+# Konvensi Persistence
 
-## Purpose
+## Tujuan
 
-This document defines the default persistence pattern for StarterPython. The `users` module is the reference implementation.
+Dokumen ini mendefinisikan pola persistence default untuk StarterPython. Modul `users` merupakan implementasi referensinya.
 
-## Reference flow
+## Alur Referensi
 
 ```text
 HTTP Request
@@ -18,21 +18,21 @@ HTTP Request
     -> PostgreSQL
 ```
 
-The dependency direction remains inward: domain and application contracts do not import SQLAlchemy.
+Arah dependency tetap bergerak ke dalam: domain dan application contract tidak mengimpor SQLAlchemy.
 
-## Domain entity
+## Domain Entity
 
-Domain entities are framework-independent Python objects. They own business invariants and normalization that are meaningful to the domain.
+Domain entity adalah object Python yang independen dari framework. Domain entity memiliki business invariant dan normalisasi yang memang bermakna bagi domain.
 
-Reference: `src/starterpython/modules/users/domain/entities.py`.
+Referensi: `src/starterpython/modules/users/domain/entities.py`.
 
-Do not use SQLAlchemy models or Pydantic request models as domain entities.
+Jangan menggunakan model SQLAlchemy atau Pydantic request model sebagai domain entity.
 
-## Repository contract
+## Repository Contract
 
-Repository contracts live on the domain/application side and describe only operations required by use cases.
+Repository contract berada di sisi domain/application dan hanya mendeskripsikan operasi yang benar-benar dibutuhkan use case.
 
-Prefer small business-oriented contracts over generic CRUD repositories.
+Utamakan contract kecil yang berorientasi bisnis dibanding generic CRUD repository.
 
 ```python
 class UserRepository(Protocol):
@@ -40,122 +40,124 @@ class UserRepository(Protocol):
     async def get_by_email(self, email: str) -> User | None: ...
 ```
 
-Do not expose SQLAlchemy `Session`, queries, ORM models, or database-specific types through the contract.
+Jangan mengekspos SQLAlchemy `Session`, query, ORM model, atau tipe khusus database melalui contract.
 
-## SQLAlchemy model
+## Model SQLAlchemy
 
-ORM models belong under `infrastructure/persistence/`. They describe storage, indexes, constraints, and mapping details.
+ORM model ditempatkan di bawah `infrastructure/persistence/`. Model ini mendeskripsikan storage, index, constraint, dan detail mapping.
 
-A SQLAlchemy model may resemble a domain entity but is not the domain entity.
+Model SQLAlchemy dapat terlihat mirip dengan domain entity, tetapi keduanya bukan object yang sama.
 
-Adapters explicitly map between ORM models and domain objects.
+Adapter harus melakukan mapping secara eksplisit antara ORM model dan domain object.
 
-## Repository adapter
+## Repository Adapter
 
-The infrastructure repository implements the repository contract using `AsyncSession`.
+Infrastructure repository mengimplementasikan repository contract menggunakan `AsyncSession`.
 
-Rules:
+Aturan:
 
-1. query construction belongs in the adapter;
-2. domain objects cross the repository boundary, not ORM models;
-3. repositories do not commit transactions;
-4. repositories may call `flush()` when an immediate database-generated value is required, but transaction completion remains outside the repository.
+1. konstruksi query berada di adapter;
+2. object yang melewati repository boundary adalah domain object, bukan ORM model;
+3. repository tidak melakukan commit transaction;
+4. repository boleh memanggil `flush()` jika membutuhkan nilai yang dihasilkan database secara langsung, tetapi penyelesaian transaction tetap berada di luar repository.
 
 ## Unit of Work
 
-The application use-case boundary owns transaction completion through a Unit of Work contract.
+Application use-case boundary mengelola penyelesaian transaction melalui contract Unit of Work.
 
 ```text
 Application Handler
-    -> repository operations
-    -> commit on success
-    -> rollback on failure
+    -> operasi repository
+    -> commit jika berhasil
+    -> rollback jika gagal
 ```
 
-HTTP routes must not contain transaction choreography.
+HTTP route tidak boleh berisi transaction choreography.
 
-For simple modules a module-specific UoW is preferred over introducing a global generic abstraction prematurely.
+Untuk modul sederhana, gunakan UoW spesifik modul daripada memperkenalkan abstraction global generik terlalu dini.
 
-## Application use case
+## Application Use Case
 
-Application handlers coordinate the use case. They may:
+Application handler mengoordinasikan use case. Ia dapat:
 
-- query repositories;
-- create or invoke domain objects;
-- coordinate multiple repository operations;
-- commit or roll back the Unit of Work;
-- return application DTO/result objects.
+- melakukan query melalui repository;
+- membuat atau memanggil domain object;
+- mengoordinasikan beberapa operasi repository;
+- melakukan commit atau rollback Unit of Work;
+- mengembalikan application DTO/result object.
 
-They should not know FastAPI request objects, HTTP status codes, or SQLAlchemy ORM models.
+Application handler tidak boleh mengetahui FastAPI request object, HTTP status code, atau SQLAlchemy ORM model.
 
-## HTTP presentation
+## HTTP Presentation
 
-Routes translate transport concerns into application commands and translate known application/domain failures into HTTP responses.
+Route menerjemahkan kebutuhan transport menjadi application command serta menerjemahkan kegagalan application/domain yang dikenali menjadi HTTP response.
 
-The route is intentionally thin:
+Route sengaja dibuat tipis:
 
 ```text
-validate request -> construct dependency -> call handler -> map result/error
+validasi request -> bangun dependency -> panggil handler -> mapping result/error
 ```
 
-## Migrations
+## Migrasi Database
 
-Alembic is the source of truth for schema evolution.
+Alembic merupakan source of truth untuk evolusi schema.
 
-- Every persistent schema change requires a migration.
-- ORM metadata used by autogenerate must be imported from `migrations/env.py` or from a future centralized model registry.
-- Never rely on `Base.metadata.create_all()` for production schema deployment.
-- Integration tests may use `create_all()` for isolated adapter tests when migration behavior is not the subject of that test.
+- Setiap perubahan persistent schema wajib memiliki migration.
+- ORM metadata yang digunakan autogenerate harus diimpor dari `migrations/env.py` atau melalui model registry terpusat pada masa mendatang.
+- Jangan mengandalkan `Base.metadata.create_all()` untuk deployment schema produksi.
+- Integration test boleh menggunakan `create_all()` untuk adapter test terisolasi jika behavior migration bukan hal yang sedang diuji.
 
-## Testing pyramid
+## Testing Pyramid
 
-### Unit tests
+### Unit Test
 
-Application/domain tests use fake repositories and fake Unit of Work implementations. They are fast and require no external infrastructure.
+Test application/domain menggunakan fake repository dan fake Unit of Work. Test ini cepat dan tidak membutuhkan infrastructure eksternal.
 
-Run:
+Jalankan:
 
 ```bash
 uv run pytest
 ```
 
-### Integration tests
+### Integration Test
 
-Repository/mapping tests use a real PostgreSQL instance and are marked `integration`.
+Test repository/mapping menggunakan PostgreSQL nyata dan diberi marker `integration`.
 
-Run locally after starting PostgreSQL:
+Jalankan secara lokal setelah PostgreSQL aktif:
 
 ```bash
 docker compose up -d postgres
 uv run pytest -o addopts="-q --strict-markers --strict-config" -m integration tests/integration
 ```
 
-GitHub Actions provisions PostgreSQL automatically for this test group.
+GitHub Actions menyediakan PostgreSQL secara otomatis untuk kelompok test ini.
 
-## Adding a new persistent module
+## Menambahkan Modul Persistent Baru
 
-Use this sequence:
+Gunakan urutan berikut:
 
-1. define domain entity/value objects;
-2. define the minimum repository contract required by the use case;
-3. define application command/query and handler;
-4. add ORM model under infrastructure;
-5. implement repository adapter;
-6. implement or extend the module Unit of Work;
-7. add migration;
-8. register ORM metadata for Alembic;
-9. expose the use case through presentation;
-10. add unit tests;
-11. add repository integration tests where persistence behavior matters.
+1. definisikan domain entity/value object;
+2. definisikan repository contract minimum yang dibutuhkan use case;
+3. definisikan application command/query dan handler;
+4. tambahkan ORM model pada infrastructure;
+5. implementasikan repository adapter;
+6. implementasikan atau perluas Unit of Work modul;
+7. tambahkan migration;
+8. daftarkan ORM metadata untuk Alembic;
+9. ekspos use case melalui presentation;
+10. tambahkan unit test;
+11. tambahkan repository integration test jika behavior persistence penting.
 
-## Anti-patterns
+## Anti-pattern
 
-Do not introduce these patterns without an explicit architectural decision:
+Jangan memperkenalkan pola berikut tanpa keputusan arsitektur eksplisit:
 
-- one global `GenericRepository[T]` for every domain;
-- commits inside repository methods;
-- SQLAlchemy models imported by domain/application code;
-- business rules inside FastAPI routes;
-- direct cross-module ORM relationships that bypass module contracts;
-- `Base.metadata.create_all()` as an application startup migration mechanism;
-- a shared `utils.py` dumping ground for persistence behavior.
+- satu global `GenericRepository[T]` untuk seluruh domain;
+- commit di dalam method repository;
+- model SQLAlchemy diimpor oleh kode domain/application;
+- business rule di dalam FastAPI route;
+- direct cross-module ORM relationship yang melewati contract modul;
+- `Base.metadata.create_all()` sebagai mekanisme migration saat startup aplikasi;
+- shared `utils.py` sebagai tempat penampungan behavior persistence.
+
+Seluruh dokumentasi persistence, migration note, dan keputusan terkait data wajib ditulis dalam Bahasa Indonesia.
