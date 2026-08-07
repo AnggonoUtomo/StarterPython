@@ -1,23 +1,26 @@
-# Change Record: <name>
+# Catatan Perubahan: <nama>
 
-## Before work
-- Related feature spec:
+> Seluruh isi dokumen ini wajib ditulis dalam Bahasa Indonesia.
+
+## Sebelum Pengerjaan
+- Feature Spec terkait:
 - Scope:
-- Files/modules expected to change:
-- Risks:
+- File/modul yang diperkirakan berubah:
+- Risiko:
 
-## Implementation log
-Record meaningful decisions or discoveries incrementally. Do not log trivial edits.
+## Log Implementasi
+Catat keputusan atau temuan penting secara incremental. Jangan mencatat edit trivial yang tidak memiliki dampak desain atau behavior.
 
-## Verification
+## Verifikasi
 - [ ] Ruff
 - [ ] Pyright
 - [ ] pytest
-- [ ] migration checked when applicable
-- [ ] docs synchronized
+- [ ] migration diperiksa jika relevan
+- [ ] dokumentasi tersinkronisasi
+- [ ] seluruh dokumentasi baru/perubahan menggunakan Bahasa Indonesia
 
-## Result
-Summarize implemented behavior and deviations from the original plan.
+## Hasil
+Ringkas behavior yang berhasil diimplementasikan serta perbedaan dari rencana awal jika ada.
 
-## Follow-up
-List deferred work explicitly.
+## Tindak Lanjut
+Tuliskan pekerjaan yang ditunda secara eksplisit.
